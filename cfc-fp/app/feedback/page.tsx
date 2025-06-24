@@ -271,7 +271,7 @@ function OtpVerificationModal({ isOpen, onClose, session, onVerificationSuccess 
       });
       if (!res.ok) {
         const errData = await res.json();
-        throw new Error(errData.error || 'Failed to send OTP.');
+        throw new Error(errData.message || errData.error || 'Failed to send OTP.');
       }
       setStep('otp');
     } catch (err: any) {
