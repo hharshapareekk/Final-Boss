@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // This is a new interface for the session data
 interface Session {
