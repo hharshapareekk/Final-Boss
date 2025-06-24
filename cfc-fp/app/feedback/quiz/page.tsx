@@ -132,9 +132,9 @@ export default function FeedbackQuiz() {
     }
 
     // Transform answers into the required structure
-    let structuredAnswers = { initial: [], positive: [], negative: [] };
+    let structuredAnswers: { initial: { question: string; answer: string | number }[]; positive: { question: string; answer: string | number }[]; negative: { question: string; answer: string | number }[] } = { initial: [], positive: [], negative: [] };
     if (questions) {
-      for (const set of ["initial", "positive", "negative"]) {
+      for (const set of ["initial", "positive", "negative"] as Array<keyof FetchedQuestions>) {
         if (questions[set]) {
           structuredAnswers[set] = questions[set]
             .map(q => {
@@ -145,7 +145,7 @@ export default function FeedbackQuiz() {
                 answer: ans.value !== undefined ? ans.value : ans.text || ""
               };
             })
-            .filter(Boolean);
+            .filter((item): item is { question: string; answer: string | number } => !!item);
         }
       }
     }
