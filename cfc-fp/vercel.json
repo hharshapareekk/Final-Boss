@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "cfc-fp/package.json",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/app.py",
+      "methods": ["GET", "POST", "OPTIONS"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "cfc-fp/$1",
+      "continue": true
+    }
+  ]
+}
