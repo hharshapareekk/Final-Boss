@@ -18,6 +18,7 @@ const transporter = nodemailer.createTransport({
 // @access  Public
 const sendOtp = async (req, res) => {
   try {
+    console.log('OTP SEND REQ BODY:', req.body);
     const { email, session_id, sessionId } = req.body;
     const sid = sessionId || session_id;
     if (!email || !sid) {
