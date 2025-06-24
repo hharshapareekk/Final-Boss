@@ -1,6 +1,6 @@
 "use client";
 
-import { sessionAPI, type Attendee, type Session } from "@/lib/api";
+import { sessionAPI, type Attendee, type Session } from "@/lib/adminApi";
 import { useParams, useRouter } from "next/navigation";
 import Papa from "papaparse";
 import { useEffect, useRef, useState } from "react";

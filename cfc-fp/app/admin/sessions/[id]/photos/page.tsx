@@ -1,6 +1,6 @@
 "use client";
 
-import { Session, attendanceAPI, sessionAPI } from "@/lib/api";
+import { Attendance, attendanceAPI, Session, sessionAPI } from "@/lib/adminApi";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
