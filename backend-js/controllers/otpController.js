@@ -74,15 +74,16 @@ const sendOtp = async (req, res) => {
 // @access  Public
 const verifyOtp = async (req, res) => {
     try {
-        const { email, session_id, otp } = req.body;
-        if (!email || !session_id || !otp) {
-            return res.status(400).json({ verified: false, error: 'Email, session_id, and OTP are required.' });
+        const { email, session_id, sessionId, otp } = req.body;
+        const sid = sessionId || session_id;
+        if (!email || !sid || !otp) {
+            return res.status(400).json({ verified: false, error: 'Email, sessionId/session_id, and OTP are required.' });
         }
 
         // Find the OTP in the database
         const storedOtp = await Otp.findOne({
             email,
-            sessionId: session_id,
+            sessionId: sid,
             otp,
         });
 
@@ -91,7 +92,7 @@ const verifyOtp = async (req, res) => {
         }
 
         // Check if the user is an actual attendee
-        const session = await Session.findById(session_id);
+        const session = await Session.findById(sid);
         if (!session) {
             return res.status(404).json({ verified: false, error: 'Session not found.' });
         }
