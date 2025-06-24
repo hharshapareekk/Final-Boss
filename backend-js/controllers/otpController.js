@@ -18,19 +18,20 @@ const transporter = nodemailer.createTransport({
 // @access  Public
 const sendOtp = async (req, res) => {
   try {
-    const { email, session_id } = req.body;
-    if (!email || !session_id) {
-      return res.status(400).json({ message: 'Email and session_id are required' });
+    const { email, session_id, sessionId } = req.body;
+    const sid = sessionId || session_id;
+    if (!email || !sid) {
+      return res.status(400).json({ message: 'Email and sessionId are required' });
     }
 
     // Check if feedback already exists for this session and email
-    const existing = await Feedback.findOne({ sessionId: session_id, email: email.toLowerCase() });
+    const existing = await Feedback.findOne({ sessionId: sid, email: email.toLowerCase() });
     if (existing) {
       return res.status(400).json({ message: 'Feedback has already been submitted for this session.' });
     }
 
     // Check if the email is registered for the session
-    const session = await Session.findById(session_id);
+    const session = await Session.findById(sid);
     if (!session) {
       return res.status(404).json({ message: 'Session not found' });
     }
@@ -44,7 +45,7 @@ const sendOtp = async (req, res) => {
 
     // Save OTP to DB
     await Otp.findOneAndUpdate(
-      { email, sessionId: session_id },
+      { email, sessionId: sid },
       { otp },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
