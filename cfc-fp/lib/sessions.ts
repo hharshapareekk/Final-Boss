@@ -14,7 +14,7 @@ export interface Attendee {
   feedbackSubmitted: boolean;
 }
 
-const ADMIN_API_BASE_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL;
+const ADMIN_API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * Get all sessions from admin backend

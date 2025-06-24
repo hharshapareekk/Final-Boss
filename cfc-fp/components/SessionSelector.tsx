@@ -15,7 +15,7 @@ export default function SessionSelector({ onSessionSelect, selectedSession }: Se
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const response = await fetch('/api/sessions');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sessions`);
         const data = await response.json();
         
         if (response.ok) {
