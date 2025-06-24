@@ -6,15 +6,27 @@ import { useState } from "react";
 import AttendeesStep from "./AttendeesStep";
 import SessionDetailsStep from "./SessionDetailsStep";
 
+type SessionDetails = {
+  name: string;
+  date: string;
+  image?: string;
+  questions: {
+    initial: { text: string; type: 'rating' }[];
+    positive: { text: string; type: 'text' }[];
+    negative: { text: string; type: 'text' }[];
+  };
+  attendees: any[];
+};
+
 export default function MultiStepCreateSession() {
   const [step, setStep] = useState(1);
-  const [sessionData, setSessionData] = useState({
+  const [sessionData, setSessionData] = useState<SessionDetails>({
     name: "",
     date: "",
     questions: {
-      initial: [{ text: "How would you rate this session overall?", type: "rating" as const }],
-      positive: [{ text: "What did you enjoy most about the session?", type: "text" as const }],
-      negative: [{ text: "What constructive feedback do you have for future sessions?", type: "text" as const }],
+      initial: [{ text: "How would you rate this session overall?", type: "rating" }],
+      positive: [{ text: "What did you enjoy most about the session?", type: "text" }],
+      negative: [{ text: "What constructive feedback do you have for future sessions?", type: "text" }],
     },
     attendees: [],
   });
@@ -23,7 +35,7 @@ export default function MultiStepCreateSession() {
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
-  const updateSessionData = (data: Partial<typeof sessionData>) => {
+  const updateSessionData = (data: Partial<SessionDetails>) => {
     setSessionData((prev) => ({ ...prev, ...data }));
   };
 
