@@ -105,9 +105,10 @@ const toBase64 = (file: File): Promise<string> => {
   });
 };
 
+export type NewSession = Omit<Session, '_id' | 'feedbackQuestions'>;
 export const sessionAPI = {
   // Create a session
-  createSession: async (sessionData: Session): Promise<Session> => {
+  createSession: async (sessionData: NewSession): Promise<Session> => {
     const response = await api.post('/sessions', sessionData);    return response.data.data?.session || response.data.data || response.data;
   },
 

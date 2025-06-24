@@ -1,6 +1,6 @@
 "use client";
 
-import { sessionAPI } from "@/lib/adminApi";
+import { NewSession, sessionAPI } from "@/lib/adminApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AttendeesStep from "./AttendeesStep";
@@ -29,7 +29,7 @@ export default function MultiStepCreateSession() {
 
   const handleSubmit = async (finalAttendees: any[]) => {
     try {
-      await sessionAPI.createSession({ ...sessionData, attendees: finalAttendees });
+      await sessionAPI.createSession({ ...sessionData, attendees: finalAttendees } as NewSession);
       alert('Session created successfully!');
       router.push('/admin/sessions');
     } catch (error) {
