@@ -267,7 +267,7 @@ function OtpVerificationModal({ isOpen, onClose, session, onVerificationSuccess 
       const res = await fetch(`${API_BASE_URL}/otp/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, session_id: session?._id }),
+        body: JSON.stringify({ email, sessionId: session?._id }),
       });
       if (!res.ok) {
         const errData = await res.json();
@@ -289,7 +289,7 @@ function OtpVerificationModal({ isOpen, onClose, session, onVerificationSuccess 
       const res = await fetch(`${API_BASE_URL}/otp/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, session_id: session?._id, otp }),
+        body: JSON.stringify({ email, sessionId: session?._id, otp }),
       });
       const data = await res.json();
       if (!res.ok || !data.verified) {
