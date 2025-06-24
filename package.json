@@ -1,0 +1,25 @@
+{
+  "name": "finalboss",
+  "version": "1.0.0",
+  "description": "A consolidated feedback portal application.",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "cd backend-js && npm run dev",
+    "dev:frontend": "npm run dev --prefix cfc-fp/cfc-fp -- -p 3000",
+    "dev": "concurrently \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-all": "npm install && npm install --prefix cfc-fp/cfc-fp && npm install --prefix backend-js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lucide-react": "^0.522.0",
+    "nodemailer": "^7.0.3",
+    "papaparse": "^5.5.3"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.16",
+    "concurrently": "^9.2.0"
+  }
+}
