@@ -73,9 +73,19 @@ export default function EditAttendeesPage() {
             .map((row: any) => ({
               name: row.name || row.Name || row["Full Name"] || row["Attendee Name"],
               email: row.email || row.Email || row["E-mail"] || row["Attendee Email"],
+              _id: "", // placeholder, backend will assign real id
+              isActual: false
             }))
             .filter((r: any) => r.name && r.email);
-          setAttendees((prev) => [...prev, ...parsed]);
+          setAttendees((prev) => [
+            ...prev,
+            ...parsed.map((att: any) => ({
+              name: att.name,
+              email: att.email,
+              _id: att._id || "",
+              isActual: typeof att.isActual === 'boolean' ? att.isActual : false
+            }))
+          ]);
         },
       });
     } else if (ext === "xlsx" || ext === "xls") {
@@ -90,9 +100,19 @@ export default function EditAttendeesPage() {
           .map((row: any) => ({
             name: row.name || row.Name || row["Full Name"] || row["Attendee Name"],
             email: row.email || row.Email || row["E-mail"] || row["Attendee Email"],
+            _id: "", // placeholder, backend will assign real id
+            isActual: false
           }))
           .filter((r: any) => r.name && r.email);
-        setAttendees((prev) => [...prev, ...parsed]);
+        setAttendees((prev) => [
+          ...prev,
+          ...parsed.map((att: any) => ({
+            name: att.name,
+            email: att.email,
+            _id: att._id || "",
+            isActual: typeof att.isActual === 'boolean' ? att.isActual : false
+          }))
+        ]);
       };
       reader.readAsBinaryString(file);
     } else {
@@ -105,7 +125,12 @@ export default function EditAttendeesPage() {
     if (manualName.trim() && manualEmail.trim()) {
       setAttendees((prev) => [
         ...prev,
-        { name: manualName.trim(), email: manualEmail.trim() },
+        {
+          name: manualName.trim(),
+          email: manualEmail.trim(),
+          _id: "",
+          isActual: false
+        },
       ]);
       setManualName("");
       setManualEmail("");
