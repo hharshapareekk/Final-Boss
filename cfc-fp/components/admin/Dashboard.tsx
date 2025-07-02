@@ -48,23 +48,17 @@ export default function Dashboard() {
           sessionMap[s._id] = s.name
         })
         setSessionMap(sessionMap)
-        
-        // Sort by createdAt descending and limit to 8 most recent feedback
-        const sorted = [...feedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        const recentFeedbacks = sorted.slice(0, 8)
-        setRecentFeedback(recentFeedbacks)
-        
-        // Compute stats based on only the 8 most recent feedback
-        const total = recentFeedbacks.length
-        const positive = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
-        const negative = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
-        const avgRatingArr = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
+        // Compute stats based on all feedbacks
+        const total = feedbacks.length
+        const positive = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
+        const negative = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
+        const avgRatingArr = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
         const avgRating = avgRatingArr.length > 0
           ? (avgRatingArr.reduce((sum: number, f: any) => sum + (f.rating || 0), 0) / avgRatingArr.length).toFixed(2)
           : 'N/A'
         setStats([
           {
-            title: 'Recent Reviews',
+            title: 'Total Feedbacks',
             value: total,
             change: '',
             icon: MessageSquare,
@@ -92,6 +86,9 @@ export default function Dashboard() {
             color: 'bg-yellow-500'
           }
         ])
+        // Sort by createdAt descending for recent feedback and limit to 8
+        const sorted = [...feedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        setRecentFeedback(sorted.slice(0, 8))
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to fetch feedback')
       } finally {
@@ -136,7 +133,7 @@ export default function Dashboard() {
       {/* Recent Feedback */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Recent Feedback</h2>
+          <h2 className="text-lg font-semibold text-gray-900">Total Feedbacks</h2>
         </div>
         <div className="divide-y divide-gray-200">
           {recentFeedback.map((feedback, idx) => (
