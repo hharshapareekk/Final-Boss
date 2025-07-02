@@ -46,7 +46,7 @@ export default function FeedbackList() {
     setLoading(true);
     setError('');
     try {
-      const res = await feedbackAPI.getAll();
+      const res = await feedbackAPI.getAll({ limit: 1000 });
       setFeedback(res.data.data);
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to fetch feedback');

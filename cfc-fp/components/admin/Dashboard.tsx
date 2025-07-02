@@ -31,7 +31,7 @@ export default function Dashboard() {
       setError('')
       try {
         const [feedbackRes, sessions] = await Promise.all([
-          feedbackAPI.getAll(),
+          feedbackAPI.getAll({ limit: 1000 }),
           sessionAPI.getSessions()
         ])
         const feedbacks = feedbackRes.data.data
