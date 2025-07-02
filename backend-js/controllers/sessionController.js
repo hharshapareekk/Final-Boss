@@ -1,5 +1,6 @@
 const Session = require('../models/Session');
 const nodemailer = require('nodemailer');
+const Feedback = require('../models/Feedback');
 
 // --- Nodemailer Transport Setup ---
 // IMPORTANT: Replace with your actual email service credentials or use environment variables
@@ -196,11 +197,14 @@ const deleteSession = async (req, res) => {
             return res.status(404).json({ message: 'Session not found' });
         }
 
+        // Delete all feedback for this session
+        await Feedback.deleteMany({ sessionId: session._id.toString() });
+
         await session.deleteOne();
 
         res.json({
             success: true,
-            message: 'Session deleted successfully'
+            message: 'Session and related feedback deleted successfully'
         });
     } catch (error) {
         console.error('Delete session error:', error);
