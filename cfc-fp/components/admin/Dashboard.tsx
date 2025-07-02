@@ -52,8 +52,9 @@ export default function Dashboard() {
         const filteredFeedbacks = feedbacks.filter((f: any) => sessionMap[f.sessionId]);
         // Compute stats based on all valid feedbacks
         const total = filteredFeedbacks.length
-        const positive = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
-        const negative = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
+        const positive = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating >= 4).length
+        const neutral = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating === 3).length
+        const negative = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0 && f.rating <= 2).length
         const avgRatingArr = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
         const avgRating = avgRatingArr.length > 0
           ? (avgRatingArr.reduce((sum: number, f: any) => sum + (f.rating || 0), 0) / avgRatingArr.length).toFixed(2)
@@ -72,6 +73,13 @@ export default function Dashboard() {
             change: '',
             icon: ThumbsUp,
             color: 'bg-green-500'
+          },
+          {
+            title: 'Neutral Reviews',
+            value: neutral,
+            change: '',
+            icon: Star,
+            color: 'bg-gray-400'
           },
           {
             title: 'Negative Reviews',
