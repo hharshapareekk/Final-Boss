@@ -48,17 +48,23 @@ export default function Dashboard() {
           sessionMap[s._id] = s.name
         })
         setSessionMap(sessionMap)
-        // Compute stats
-        const total = feedbacks.length
-        const positive = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
-        const negative = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
-        const avgRatingArr = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
+        
+        // Sort by createdAt descending and limit to 8 most recent feedback
+        const sorted = [...feedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        const recentFeedbacks = sorted.slice(0, 8)
+        setRecentFeedback(recentFeedbacks)
+        
+        // Compute stats based on only the 8 most recent feedback
+        const total = recentFeedbacks.length
+        const positive = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
+        const negative = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
+        const avgRatingArr = recentFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
         const avgRating = avgRatingArr.length > 0
           ? (avgRatingArr.reduce((sum: number, f: any) => sum + (f.rating || 0), 0) / avgRatingArr.length).toFixed(2)
           : 'N/A'
         setStats([
           {
-            title: 'Total Feedback',
+            title: 'Recent Reviews',
             value: total,
             change: '',
             icon: MessageSquare,
@@ -86,9 +92,6 @@ export default function Dashboard() {
             color: 'bg-yellow-500'
           }
         ])
-        // Sort by createdAt descending for recent feedback and limit to 8
-        const sorted = [...feedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        setRecentFeedback(sorted.slice(0, 8))
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to fetch feedback')
       } finally {
