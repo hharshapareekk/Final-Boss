@@ -82,7 +82,6 @@ export default function FeedbackList() {
       // Default: sort by rating
       return sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
     })
-    .slice(0, 10); // Limit to most recent 10 reviews
 
   const getStatusIcon = (status: string) => {
     switch (status) {
