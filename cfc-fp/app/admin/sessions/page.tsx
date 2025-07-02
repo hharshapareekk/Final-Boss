@@ -1,6 +1,7 @@
 "use client";
 
 import { Session, sessionAPI } from "@/lib/adminApi";
+import { Trash2 } from 'lucide-react';
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -34,6 +35,16 @@ export default function SessionsListPage() {
     } catch (error) {
       console.error('Failed to send notifications:', error);
       setNotificationStatus(prev => ({ ...prev, [sessionId]: 'error' }));
+    }
+  };
+
+  const handleDelete = async (sessionId: string) => {
+    if (!confirm('Are you sure you want to delete this session?')) return;
+    try {
+      await sessionAPI.deleteSession(sessionId);
+      setSessions(sessions => sessions.filter(s => s._id !== sessionId));
+    } catch (err) {
+      alert('Failed to delete session');
     }
   };
 
@@ -96,6 +107,13 @@ export default function SessionsListPage() {
                         View
                       </button>
                     </Link>
+                    <button
+                      onClick={() => handleDelete(session._id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded-md text-sm hover:bg-red-600 flex items-center"
+                      title="Delete session"
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" /> Delete
+                    </button>
                   </div>
                 </div>
               </div>
