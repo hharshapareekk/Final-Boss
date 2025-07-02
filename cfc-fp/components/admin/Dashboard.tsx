@@ -48,11 +48,13 @@ export default function Dashboard() {
           sessionMap[s._id] = s.name
         })
         setSessionMap(sessionMap)
-        // Compute stats based on all feedbacks
-        const total = feedbacks.length
-        const positive = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
-        const negative = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
-        const avgRatingArr = feedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
+        // Filter out feedbacks with missing sessions
+        const filteredFeedbacks = feedbacks.filter((f: any) => sessionMap[f.sessionId]);
+        // Compute stats based on all valid feedbacks
+        const total = filteredFeedbacks.length
+        const positive = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 3).length
+        const negative = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating <= 3 && f.rating > 0).length
+        const avgRatingArr = filteredFeedbacks.filter((f: any) => typeof f.rating === 'number' && f.rating > 0)
         const avgRating = avgRatingArr.length > 0
           ? (avgRatingArr.reduce((sum: number, f: any) => sum + (f.rating || 0), 0) / avgRatingArr.length).toFixed(2)
           : 'N/A'
@@ -87,7 +89,7 @@ export default function Dashboard() {
           }
         ])
         // Sort by createdAt descending for recent feedback and limit to 8
-        const sorted = [...feedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        const sorted = [...filteredFeedbacks].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
         setRecentFeedback(sorted.slice(0, 8))
       } catch (err: any) {
         setError(err.response?.data?.message || 'Failed to fetch feedback')
@@ -161,7 +163,7 @@ export default function Dashboard() {
               {/* Feedback Content */}
               <div className="flex-1">
                 <div className="mb-2">
-                  <span className="font-bold text-blue-700">Session:</span> <span className="font-semibold text-gray-800">{sessionMap[feedback.sessionId] || feedback.sessionId}</span>
+                  <span className="font-bold text-blue-700">Session:</span> <span className="font-semibold text-gray-800">{sessionMap[feedback.sessionId] || 'Deleted Session'}</span>
                 </div>
                 <div className="mb-2">
                   <span className="font-bold text-gray-700">Answers:</span>

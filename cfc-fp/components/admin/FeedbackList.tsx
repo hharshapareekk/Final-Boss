@@ -59,7 +59,9 @@ export default function FeedbackList() {
     fetchFeedback();
   }, []);
 
-  const filteredFeedback = feedback
+  // Filter out feedbacks with missing sessions
+  const validFeedback = feedback.filter(item => item.session && item.session.name);
+  const filteredFeedback = validFeedback
     .filter(item => {
       const sessionName = item.session?.name || '';
       const matchesSearch = sessionName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -270,7 +272,7 @@ export default function FeedbackList() {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-black">{item.session.name}</div>
+                  <div className="text-sm text-black">{item.session?.name || 'Deleted Session'}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
@@ -313,7 +315,7 @@ export default function FeedbackList() {
             {viewedFeedback && (
               <div className="space-y-2">
                 <div><span className="font-semibold">User Email:</span> {viewedFeedback.user?.email}</div>
-                <div><span className="font-semibold">Session:</span> {viewedFeedback.session?.name}</div>
+                <div><span className="font-semibold">Session:</span> {viewedFeedback.session?.name || 'Deleted Session'}</div>
                 <div><span className="font-semibold">Rating:</span> {viewedFeedback.rating === 0 ? <span className="text-red-600 font-bold ml-1">MISSED SESSION</span> : viewedFeedback.rating}</div>
                 <div><span className="font-semibold">Date:</span> {
                   (() => {
